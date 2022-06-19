@@ -44,4 +44,5 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+SELECT c5, COUNT(c5) FROM tbl0 ORDER BY c4;
 

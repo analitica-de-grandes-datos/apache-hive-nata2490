@@ -45,4 +45,7 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+https://stackoverflow.com/questions/858528/sql-query-to-make-all-data-in-a-column-upper-case
+SELECT UPPER(c5) FROM tbl0;
+UPDATE datos SET col5 = UPPER(c5);
 
