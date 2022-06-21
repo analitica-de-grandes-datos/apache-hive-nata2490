@@ -14,23 +14,29 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
         >>> Escriba su respuesta a partir de este punto <<<
 */
 DROP TABLE IF EXISTS datos;
-DROP TABLE IF EXISTS letter_count;
---CREATE TABLE datos (line STRING);
+DROP TABLE IF EXISTS letter_counts;
+
 CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n';
---LOCATION '/workspace/pregunta_01/output;
 
-LOAD DATA LOCAL INPATH '/workspace/pregunta_01/data.tsv'
-OVERWRITE INTO TABLE datos;
-SELECT * FROM datos LIMIT 10;
+LOAD DATA LOCAL INPATH "/workspace/pregunta_01/data.tsv" OVERWRITE INTO TABLE datos;
 
---https://stackoverflow.com/questions/9994970/counting-in-hadoop-hive
---CREATE TABLE letter_count AS
---SELECT col1, count(*) AS count FROM datos;
---(SELECT explode(split(col1, '\\s')) AS letter FROM datos) w
---GROUP BY letter
---ORDER BY letetr;
---SELECT * FROM letter_count LIMIT 10;
-SELECT col1, COUNT(*) FROM datos GROUP BY col1;
+CREATE TABLE letter_counts AS
+SELECT col1, count(1)
+FROM datos
+GROUP BY col1
+ORDER BY col1;
+
+INSERT OVERWRITE DIRECTORY '/workspace/pregunta_01/output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+--SELECT * FROM letter_counts; --LIMIT 10
+
+--hive -f /workspace/pregunta_01/pregunta.hql --ejecucion del script
+--hdfs dfs -cat /workspace/pregunta_01/pregunta.hql --visualizacion del script
+--rm -rf *.log
+--SELECT count(*) FROM col1 GROUP BY col1
+--SELECT COUNT(col1) FROM datos GROUP BY col1;
+--SELECT COUNT(DISTINCT col1) FROM datos;
+--SELECT col1, COUNT(*) FROM datos GROUP BY col1;

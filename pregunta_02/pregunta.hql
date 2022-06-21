@@ -12,12 +12,17 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
-CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+DROP TABLE IF EXISTS datos;
+DROP TABLE IF EXISTS letter_count;
 
-LOAD DATA LOCAL INPATH "/workspace/output"
+CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n';
+
+LOAD DATA LOCAL INPATH '/workspace/pregunta_02/data.tsv'
 OVERWRITE INTO TABLE datos;
 
-SELECT * FROM datos ORDER BY col1, col3;
+hive -s -e 'SELECT * FROM datos ORDER BY col1, col3;' > resultado.csv
 
 
