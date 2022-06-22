@@ -13,14 +13,20 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
-https://es.stackoverflow.com/questions/134849/query-sql-uso-count-distinct-valores-unicos
-CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT)
+
+DROP TABLE IF EXISTS numbers;
+DROP TABLE IF EXISTS min_numbers;
+
+CREATE TABLE numbers (col1 STRING, col2 STRING, col3 INT)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
 
-LOAD DATA LOCAL INPATH "/workspace/output"
-OVERWRITE INTO TABLE datos;
+LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE numbers;
 
-SELECT TOP 5 (SELECT MIN(DISTINCT col3) FROM datos ORDER BY col3 ASC/DESC;
+CREATE TABLE min_numbers AS SELECT (DISTINCT col3) FROM numbers ORDER BY col3 ASC LIMIT 5;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM min_numbers;
 
 
 
