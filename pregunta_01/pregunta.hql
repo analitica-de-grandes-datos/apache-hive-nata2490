@@ -13,30 +13,24 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
-DROP TABLE IF EXISTS datos;
-DROP TABLE IF EXISTS letter_counts;
+DROP TABLE IF EXISTS docs;
+DROP TABLE IF EXISTS word_counts;
 
-CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n';
+CREATE TABLE docs (col1 STRING, col2 STRING, col3 INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
 
-LOAD DATA LOCAL INPATH "/workspace/pregunta_01/data.tsv" OVERWRITE INTO TABLE datos;
+LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE docs;
 
-CREATE TABLE letter_counts AS
-SELECT col1, count(1)
-FROM datos
-GROUP BY col1
-ORDER BY col1;
+CREATE TABLE word_counts
+AS
+    SELECT word, count(1) AS count
+    FROM
+        (SELECT col1 AS word FROM docs) w
+GROUP BY
+    word
+ORDER BY
+    word;
 
-INSERT OVERWRITE DIRECTORY '/workspace/pregunta_01/output'
+INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
---SELECT * FROM letter_counts; --LIMIT 10
-
---hive -f /workspace/pregunta_01/pregunta.hql --ejecucion del script
---hdfs dfs -cat /workspace/pregunta_01/pregunta.hql --visualizacion del script
---rm -rf *.log
---SELECT count(*) FROM col1 GROUP BY col1
---SELECT COUNT(col1) FROM datos GROUP BY col1;
---SELECT COUNT(DISTINCT col1) FROM datos;
---SELECT col1, COUNT(*) FROM datos GROUP BY col1;
+SELECT * FROM word_counts;
