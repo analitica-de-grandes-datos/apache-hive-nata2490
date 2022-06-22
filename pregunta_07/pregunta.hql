@@ -45,4 +45,6 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+SELECT (DISTINCT c2)
+SELECT  (DISTINCT c2) FROM tbl0 WHERE c13>400 GROUP BY (K0);
 

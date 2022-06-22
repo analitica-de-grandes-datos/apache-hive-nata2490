@@ -13,26 +13,24 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
+DROP TABLE IF EXISTS letters;
+DROP TABLE IF EXISTS letters_counts;
 
-mkdir -p /workspace/pregunta_01/output/data.tsv
-DROP TABLE IF EXISTS datos;
-DROP TABLE IF EXISTS word_counts;
-CREATE TABLE datos (line STRING);
-CREATE TABLE datos (col1 STRING, col2 STRING, col3 INT);
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY '\t'
-LINES TERMINATED BY '\n';
---LOCATION '/workspace/pregunta_01/output'
+CREATE TABLE letters (col1 STRING, col2 STRING, col3 INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
 
-LOAD DATA LOCAL INPATH '/workspace/pregunta_01/data.tsv'
-OVERWRITE INTO TABLE datos;
-SELECT * FROM datos LIMIT 10; --visualizar las 10 primeras lineas
+LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE letters;
 
---SELECT explode(split(line, '\\s')) AS letter FROM datos LIMIT 5;
+CREATE TABLE letters_counts
+AS
+    SELECT letter, count(1) AS count
+    FROM
+        (SELECT col1 AS letter FROM letters) w
+GROUP BY
+    letter
+ORDER BY
+    letter;
 
-CREATE TABLE word_counts AS
-SELECT letter, count(1) AS count FROM
-(SELECT explode(split(line, '\\s')) AS letter FROM datos) w
-GROUP BY letter
-ORDER BY letter;
-SELECT * FROM word_counts LIMIT 10; --visualizar las 10 primeras lineas
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM letters_counts;
