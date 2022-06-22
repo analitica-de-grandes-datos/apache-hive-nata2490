@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS letters_unique;
 CREATE TABLE letters (col1 INT, col2 STRING, col3 INT, col4 DATE, col5 STRING, col6 STRING)
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
 
-LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE letters;
+LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE letters;
 
 CREATE TABLE letters_unique
 AS SELECT DISTINCT letter FROM (SELECT explode(split(col5, ':')) AS letter FROM letters) w
