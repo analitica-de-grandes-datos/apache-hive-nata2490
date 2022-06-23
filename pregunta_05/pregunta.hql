@@ -64,12 +64,12 @@ FIELDS TERMINATED BY ','
 COLLECTION ITEMS TERMINATED BY ':'
 MAP KEYS TERMINATED BY '#'
 LINES TERMINATED BY '\n';
---STORED AS TEXTFILE
---LOCATION '/tmp/hive-journals';
+#--STORED AS TEXTFILE
+#--LOCATION '/tmp/hive-journals';
 
 LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE letters;
 
---CREATE TABLE letters_by_year AS
+#CREATE TABLE letters_by_year AS
 SELECT
     letters,
     letters_by_year
