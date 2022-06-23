@@ -69,19 +69,13 @@ LINES TERMINATED BY '\n';
 
 LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE letters;
 
-#CREATE TABLE letters_by_year AS
+CREATE TABLE letters_by_year AS
 SELECT
     letters,
-    letters_by_year
-FROM (
-    SELECT
-        letters,
-        letters_by_year AS lettersbyyear
-    FROM
-        letters
-) table1
-ORDER BY
-    letters_by_year DESC;
+    map(col4, col5) as p,
+    category
+FROM
+    detail;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
