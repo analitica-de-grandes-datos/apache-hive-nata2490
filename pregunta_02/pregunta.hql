@@ -12,14 +12,25 @@ Escriba el resultado a la carpeta `output` de directorio de trabajo.
 
         >>> Escriba su respuesta a partir de este punto <<<
 */
-DROP TABLE IF EXISTS letters;
 
-CREATE TABLE letters (col1 STRING, col2 STRING, col3 INT)
-ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
+DROP TABLE IF EXISTS datos;
+DROP TABLE IF EXISTS ordered_datos;
 
-LOAD DATA LOCAL INPATH 'data.tsv' OVERWRITE INTO TABLE letters;
+CREATE TABLE datos (
+    c1 STRING,
+    c2 DATE, 
+    c3 INT
+    )
+    ROW FORMAT DELIMITED 
+        FIELDS TERMINATED BY '\t'
+        LINES TERMINATED BY '\n';
 
-#SELECT * FROM letters ORDER BY col1, col3 ASC;
+LOAD DATA LOCAL INPATH 'data.tsv' INTO TABLE datos;
+
+CREATE TABLE ordered_datos AS 
+SELECT c1,c2,c3 FROM datos
+ORDER BY c1,c3,c2;
+
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT * FROM letters ORDER BY col1, col3 ASC;
+SELECT * FROM ordered_datos;

@@ -45,33 +45,10 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
-#https://stackoverflow.com/questions/858528/sql-query-to-make-all-data-in-a-column-upper-case
 
-DROP TABLE IF EXISTS datos;
-DROP TABLE IF EXISTS letters_upper;
-
-CREATE TABLE datos (
-    col1 INT,
-    col2 STRING,
-    col3 INT,
-    col4 DATE,
-    col5 ARRAY<CHAR(1)>,
-    col6 MAP<STRING, INT>
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-COLLECTION ITEMS TERMINATED BY ':'
-MAP KEYS TERMINATED BY '#'
-LINES TERMINATED BY '\n';
-#--STORED AS TEXTFILE
-#--LOCATION '/tmp/hive-journals';
-
-LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE datos;
-
-UPDATE datos SET col5= UPPER(col5)
-
-CREATE TABLE letters_upper AS SELECT col5 FROM datos;
+CREATE TABLE result AS 
+SELECT UPPER(c5) FROM tbl0;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT * FROM letters_upper;
+SELECT * FROM result;

@@ -48,35 +48,11 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
-DROP TABLE IF EXISTS letters;
-DROP TABLE IF EXISTS letters_by_year;
-
-CREATE TABLE letters (
-    col1 INT,
-    col2 STRING,
-    col3 INT,
-    col4 DATE,
-    col5 ARRAY<CHAR(1)>,
-    col6 MAP<STRING, INT>
-)
-ROW FORMAT DELIMITED
-FIELDS TERMINATED BY ','
-COLLECTION ITEMS TERMINATED BY ':'
-MAP KEYS TERMINATED BY '#'
-LINES TERMINATED BY '\n';
-#--STORED AS TEXTFILE
-#--LOCATION '/tmp/hive-journals';
-
-LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE letters;
-
-CREATE TABLE letters_by_year AS
-SELECT
-    letters,
-    map(col4, col5) as p,
-    category
-FROM
-    detail;
+CREATE TABLE ordered_datos AS 
+SELECT YEAR(c4), letter, COUNT(letter) FROM tbl0
+LATERAL VIEW explode(c5) tbl AS letter
+GROUP BY YEAR(C4),letter;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT * FROM letters_by_year;
+SELECT * FROM ordered_datos;
