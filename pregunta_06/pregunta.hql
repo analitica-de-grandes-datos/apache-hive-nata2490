@@ -46,9 +46,13 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
     >>> Escriba su respuesta a partir de este punto <<<
 */
 
-CREATE TABLE result AS 
-SELECT UPPER(c5) FROM tbl0;
+DROP TABLE IF EXISTS tabla_final;
+
+CREATE TABLE tabla_final AS 
+SELECT UPPER(CONCAT_WS(':', c5)) AS c5_mayus
+FROM tbl0;
 
 INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT * FROM result;
+SELECT c5_mayus 
+FROM tabla_final;
