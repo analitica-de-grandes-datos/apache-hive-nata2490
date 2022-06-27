@@ -44,3 +44,19 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
+
+DROP TABLE IF EXISTS letters;
+DROP TABLE IF EXISTS letters_unique;
+
+CREATE TABLE letters (col1 INT, col2 STRING, col3 INT, col4 DATE, col5 STRING, col6 STRING)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH 'data0.csv' OVERWRITE INTO TABLE letters;
+
+CREATE TABLE letters_unique
+AS SELECT DISTINCT letter FROM (SELECT explode(split(col5, ':')) AS letter FROM letters) w
+ORDER BY letter;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+SELECT * FROM letters_unique;
