@@ -45,8 +45,12 @@ LOAD DATA LOCAL INPATH 'data1.csv' INTO TABLE tbl1;
 /*
     >>> Escriba su respuesta a partir de este punto <<<
 */
-*/
 
-INSERT OVERWRITE DIRECTORY 'output'
+CREATE TABLE result AS 
+
+SELECT t0.c1, t0.c2, MAP_VALUES(t1.c4) FROM tbl0 t0 JOIN (SELECT c1,MAP_VALUES(c4) FROM tbl1)t1 ON (t0.c1=t1.c1)
+WHERE MAP_VALUES(t1.c4)=c2;
+
+INSERT OVERWRITE LOCAL DIRECTORY './output'
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-SELECT c2, concat_ws(':', collect_set(cast(c1 as string))) FROM (SELECT c2, c1 FROM tbl0 ORDER BY c1) tabla GROUP BY c2;
+SELECT * FROM result;

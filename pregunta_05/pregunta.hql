@@ -1,6 +1,3 @@
-from numpy import complex512
-
-
 /*
 
 Pregunta
